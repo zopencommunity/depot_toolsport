@@ -1,0 +1,14 @@
+diff --git a/vpython3 b/vpython3
+index 1ff7a252..cf93ddd4 100755
+--- a/vpython3
++++ b/vpython3
+@@ -48,6 +48,9 @@ case "${DEPOT_TOOLS_UNAME_S}" in
+ mingw*|cygwin*)
+   cmd.exe //c $0.bat "$@"
+   ;;
++os/390)
++  exec python3 "$@"
++  ;;
+ *)
+   exec "${base_dir}/.cipd_bin/vpython3" "$@"
+   ;;
