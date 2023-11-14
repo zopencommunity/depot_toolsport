@@ -1,0 +1,28 @@
+diff --git a/gclient.py b/gclient.py
+index 9d490f8a..2b054a70 100755
+--- a/gclient.py
++++ b/gclient.py
+@@ -1503,6 +1503,7 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
+             'checkout_mips': 'mips' in self.target_cpu,
+             'checkout_mips64': 'mips64' in self.target_cpu,
+             'checkout_ppc': 'ppc' in self.target_cpu,
++            'checkout_zos': 'zos' in self.target_cpu,
+             'checkout_s390': 's390' in self.target_cpu,
+             'checkout_x64': 'x64' in self.target_cpu,
+             'host_cpu': detect_host_arch.HostArch(),
+@@ -1534,6 +1535,7 @@ _PLATFORM_MAPPING = {
+     'linux': 'linux',
+     'win32': 'win',
+     'aix6': 'aix',
++    'zos': 'zos',
+ }
+ 
+ 
+@@ -1608,6 +1610,7 @@ class GClient(GitDependency):
+         "ios": "ios",
+         "fuchsia": "fuchsia",
+         "chromeos": "chromeos",
++        "zos": "zos",
+     }
+ 
+     DEFAULT_CLIENT_FILE_TEXT = ("""\

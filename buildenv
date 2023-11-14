@@ -2,8 +2,18 @@ export ZOPEN_BUILD_LINE="DEV"
 export ZOPEN_DEV_URL="https://chromium.googlesource.com/chromium/tools/depot_tools.git"
 export ZOPEN_DEV_DEPS="python"
 export ZOPEN_RUNTIME_DEPS="python"
-export ZOPEN_BOOTSTRAP='python3'
-export ZOPEN_BOOTSTRAP_OPTS='bootstrap/bootstrap.py'
+export ZOPEN_BOOTSTRAP="python3"
+export ZOPEN_PYTHONDIR=`type python3 | head -1 | sed "s:^.*[ (]/:/:;s:)$::"`
+export ZOPEN_BOOTSTRAP_OPTS="bootstrap/bootstrap.py --bootstrap-name ${ZOPEN_PYTHONDIR}"
+# Nothing to configure or build:
+export ZOPEN_CONFIGURE="skip"
+export ZOPEN_MAKE="skip"
+export ZOPEN_INSTALL="zopen_install"
+
+zopen_install() {
+  mkdir -p $ZOPEN_INSTALL_DIR
+  cp -r * $ZOPEN_INSTALL_DIR/ # modify to copy the relevant scripts
+}
 
 zopen_check_results()
 {
