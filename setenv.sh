@@ -2,7 +2,6 @@
 
 # update the path
 export PATH=${HOME}/zopen/dev/depot_toolsport/depot_tools:$PATH
-#export PATH=/z/jd895801/zopen/dev/depot_toolsport/depot_tools:$PATH
 
 # activate the virtual env
 . ./myenv/bin/activate
