@@ -4,3 +4,5 @@ log.STABLE/
 build/
 install/
 depot_tools/
+myenv/
+
