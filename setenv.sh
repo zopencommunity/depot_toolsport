@@ -20,5 +20,5 @@ gclient metrics --opt-out
 
 # remove any previous attempts of fetch
 # so as to pull a fresh copy
-rm ${HOME}/zopen/dev/.gclient_entries
-rm ${HOME}/zopen/dev/.gclient
+rm ${HOME}/zopen/dev/v8base/.gclient_entries
+rm ${HOME}/zopen/dev/v8base/.gclient
