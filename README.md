@@ -61,6 +61,7 @@ $ source setenv.sh
 At this point, depot_tools is ready for use.  For example:
 
 ```
+TODO: needs to be modified for v8base
 $ cd ${HOME}/zopen/dev/
 $ fetch v8
 ```
