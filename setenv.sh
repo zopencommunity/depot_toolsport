@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # update the path
-export PATH=${HOME}/zopen/dev/depot_toolsport/depot_tools:$PATH
+export PATH=${PATH}:${HOME}/zopen/dev/depot_toolsport/depot_tools
 
 # activate the virtual env
 . ./myenv/bin/activate
