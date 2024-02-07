@@ -18,6 +18,12 @@ export DEPOT_TOOLS_BOOTSTRAP_PYTHON3=0
 # Comment out this line if you wish to participate.
 gclient metrics --opt-out
 
+# ensure zoslib when built as part of the manual workflow
+# in v8port uses the correct toolchain
+$ export CC=clang
+$ export CXX=clang++
+$ export LINK=clang++
+
 # provide a mechanism to resume work on v8 versus 
 # ensure pristine.   Assume by default the user
 # desires a pristine state and a fresh fetch.
