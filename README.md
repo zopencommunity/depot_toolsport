@@ -77,11 +77,23 @@ Note, until `zopen build` is performed, gclient will not be available.  Once `zo
 performed the git repot will be present and the `setenv.sh` script will not complain.
 
 This script will activate the python virtual environment, modify the path to access 
-the tools provided by depot_tools, and disable updates and metrics.
+the tools provided by depot_tools, and disable updates and metrics.  NOTE: by default
+it clears entires created by depot_tools as part of the fetch usage.  If you 
+wish to preserve an existing fetch operation and just need the path and
+virtual environment, use the `-resume` switch with `setenv.sh` as shown
+below.
 
 ```
 $ cd ${HOME}/zopen/dev/depot_toolsport
 $ source setenv.sh
+```
+
+Optionally, if you wish to resume work here is how to use
+the `-resume` switch.
+
+```
+$ cd ${HOME}/zopen/dev/depot_toolsport
+$ source setenv.sh -resume
 ```
 
 At this point, depot_tools is ready for use.  For example:
