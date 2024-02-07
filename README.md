@@ -1,14 +1,40 @@
 [![Automatic version updates](https://github.com/ZOSOpenTools/depot_toolsport/actions/workflows/bump.yml/badge.svg)](https://github.com/ZOSOpenTools/depot_toolsport/actions/workflows/bump.yml)
 
-# depot_tools
+# depot_tools port
 
 Tools for working with Chromium development. It requires python 3.8 or higher.
 
+The upstream for depot tools is [here.](https://www.chromium.org/developers/how-tos/depottools/)
+
 ## Developer Notes
+
+### Building Depot Tools
+
+In order to build from a pristine state ensure that the original
+git clone is removed.
+
+Assuming the depot_toolsport repo is in `$HOME/zopen/dev/depot_toolsport`
+
+If this is a brand new git clone, the upstream `depot_tools` directory
+will not exist and this step is skipped.
+
+```
+$ cd ${HOME}/zopen/dev/depot_toolsport
+$ rm -rf depot_tools
+```
+
+Actual building of the port:
+
+```
+$ cd ${HOME}/zopen/dev/depot_toolsport
+$ zopen build
+```
+
+### Using Depot Tools
 
 This is the workflow for using depot tools port.
 
-### Create and and use a python virtual environment
+#### Create and and use a python virtual environment
 
 This only needs to be done once.  This creates a virtual environment in 
 the specified directory `myenv`.  This name is in the `.gitignore`.  If
@@ -44,7 +70,7 @@ $ cd ${HOME}/zopen/dev/depot_toolsport
 $ pip install -r requirements.txt
 ```
 
-### Updating the developer environment
+#### Updating the developer environment
 
 There is a script in the repo which can be used to setup environment for using depot_tools.
 Note, until `zopen build` is performed, gclient will not be available.  Once `zopen build` is
