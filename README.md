@@ -30,6 +30,22 @@ $ cd ${HOME}/zopen/dev/depot_toolsport
 $ zopen build
 ```
 
+Regarding `zopen build`, it does the following things:
+
+* it creates a directory `~/zopen/usr/local/zopen/depot_tools`.
+    - during the setup of zopen via `. ${HOME}/zopen/etc/zopen-config` which is normally
+      put in the user's `.bashrc`, this will source the `.appenv` file in this tree.
+      Note, `zopen-config` sources all `.appenv` files for all the installed packages.
+
+
+Something to keep in my when building a package/port using `zopen build` and installing
+a package/port using `zopen install some_pkg_name`, the end result is the same.  That 
+is the results are put in `${HOME}/zopen/usr/local/pkg_name`.  There is not a concept
+of a `make` and `make install` as two separate steps when building packages from source.
+
+
+
+
 ### Using Depot Tools
 
 This is the workflow for using depot tools port.

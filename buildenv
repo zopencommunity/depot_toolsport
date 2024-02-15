@@ -84,13 +84,13 @@ zopen_append_to_setup()
     # /z/jd895801/zopen/usr/local/zopen/depot_tools/depot_tools-main
     echo "echo \"    Creating a python venv...\""
     echo "python3 -m venv venv"
-    echo "echo \"    Upgrading pip in venv...\""
+    #echo "echo \"    Upgrading pip in venv...\""
     #echo "python -m pip install -U pip"
-    echo "pip install -U pip"
-    echo "echo \"    Installing packages via requirements.txt...\""
-    echo "pip install --user -r ${ZOPEN_INSTALL_DIR}/requirements.txt"
-    echo "echo \"    Activating virtual python environment - venv ...\""
-    echo "source ${ZOPEN_INSTALL_DIR}/venv/bin/activate"
+    #echo "pip install -U pip"
+    #echo "echo \"    Activating virtual python environment - venv ...\""
+    #echo "source ${ZOPEN_INSTALL_DIR}/venv/bin/activate"
+    #echo "echo \"    Installing packages via requirements.txt...\""
+    #echo "pip install  -r ${ZOPEN_INSTALL_DIR}/requirements.txt"
 }
 
 zopen_get_version()
