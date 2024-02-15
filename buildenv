@@ -28,6 +28,8 @@ zopen_check_results()
   echo "expectedTotalTests:1"
 }
 
+# zopen_append_env() creates a file with the settings below
+# Its ${HOME}/usr/local/zopen/depot_tools/depot_tools-main/.appenv
 zopen_append_to_env()
 {
   # echo envars outside of PATH, MANPATH, LIBPATH
@@ -35,7 +37,7 @@ zopen_append_to_env()
   # update the path for depot_tools
   #export PATH=${PATH}:${HOME}/zopen/dev/depot_toolsport/depot_tools
   # update the path for pip
-  #export PATH=${PATH}:${HOME}/.local/bin
+  echo "export PATH=${PATH}:${HOME}/.local/bin"
   # update the compiler settings
   # TODO: this can probably be moved to v8 build later
   echo "export CC=clang"
@@ -72,22 +74,23 @@ zopen_append_to_env()
 #
 # Build workflow
 # cd ~/zopen/dev/depot_toolsport
-# rm ~/zopen/usr/local/zopen/depot_tools; rm install depot_tools; zopen build
+# rm ~/.local ~/zopen/usr/local/zopen/depot_tools; rm install depot_tools; zopen build
 
 
 zopen_append_to_setup()
 {
-# echo commands that will run when installing via setup.sh
-# At this time, ZOPEN_INSTAL_DIR is:
-# /z/jd895801/zopen/usr/local/zopen/depot_tools/depot_tools-main
-echo "echo \"\tCreating a python venv...\""
-echo "python3 -m venv venv"
-echo "echo \"\tActivating python venv named venv...\""
-echo "source ${ZOPEN_INSTALL_DIR}/venv/bin/activate"
-echo "echo \"\tUpgrading pip in venv...\""
-echo "python -m pip install -U pip"
-echo "echo \"Installing packages via requirements.txt...\""
-echo "pip install -r ${ZOPEN_INSTALL_DIR}/requirements.txt"
+    # echo commands that will run when installing via setup.sh
+    # At this time, ZOPEN_INSTAL_DIR is:
+    # /z/jd895801/zopen/usr/local/zopen/depot_tools/depot_tools-main
+    echo "echo \"    Creating a python venv...\""
+    echo "python3 -m venv venv"
+    echo "echo \"    Upgrading pip in venv...\""
+    #echo "python -m pip install -U pip"
+    echo "pip install -U pip"
+    echo "echo \"    Installing packages via requirements.txt...\""
+    echo "pip install --user -r ${ZOPEN_INSTALL_DIR}/requirements.txt"
+    echo "echo \"    Activating virtual python environment - venv ...\""
+    echo "source ${ZOPEN_INSTALL_DIR}/venv/bin/activate"
 }
 
 zopen_get_version()
