@@ -32,39 +32,26 @@ zopen_append_to_env()
 {
   # echo envars outside of PATH, MANPATH, LIBPATH
 
-  # i'm not seeing these prints in zopen build.
-  # perhaps its written the setup.sh in the 
-  # usr/local/zopen dir
-
-  echo "***** in append_to_env() start"
-  echo "CWD: "
-  pwd
-
-
-
   # update the path for depot_tools
-  export PATH=${PATH}:${HOME}/zopen/dev/depot_toolsport/depot_tools
+  #export PATH=${PATH}:${HOME}/zopen/dev/depot_toolsport/depot_tools
   # update the path for pip
-  export PATH=${PATH}:${HOME}/.local/bin
+  #export PATH=${PATH}:${HOME}/.local/bin
   # update the compiler settings
   # TODO: this can probably be moved to v8 build later
-  export CC=clang
-  export CXX=clang++
-  export LINK=clang++
+  echo "export CC=clang"
+  echo "export CXX=clang++"
+  echo "export LINK=clang++"
   # Disable updating depot_tools
-  export DEPOT_TOOLS_UPDATE=0
+  echo "export DEPOT_TOOLS_UPDATE=0"
 
   # Disable commands:
   # * ensure_bootstrap
   # * update_depot_tools
-  export DEPOT_TOOLS_BOOTSTRAP_PYTHON3=0
+  echo "export DEPOT_TOOLS_BOOTSTRAP_PYTHON3=0"
 
   # Using depot_tools disable metrics.
   # Comment out this line if you wish to participate.
-  #gclient metrics --opt-out
-
-
-  echo "***** in append_to_env() end"
+  #echo "gclient metrics --opt-out"
 }
 
 
@@ -82,31 +69,25 @@ zopen_append_to_env()
 # https://github.com/ZOSOpenTools/sudoport/blob/main/buildenv#L49
 #
 # https://github.com/ZOSOpenTools/gpgport/blob/main/buildenv#L50
+#
+# Build workflow
+# cd ~/zopen/dev/depot_toolsport
+# rm ~/zopen/usr/local/zopen/depot_tools; rm install depot_tools; zopen build
+
 
 zopen_append_to_setup()
 {
 # echo commands that will run when installing via setup.sh
-cat <<EOF
-echo "***** append_to_setup() start"
-echo "***** append_to_setup() start"
-echo "***** append_to_setup() start"
-echo "CWD:"
-pwd
+# At this time, ZOPEN_INSTAL_DIR is:
 # /z/jd895801/zopen/usr/local/zopen/depot_tools/depot_tools-main
-echo "ZOPEN_INSTALL_DIR: $ZOPEN_INSTALL_DIR"
-# /z/jd895801/zopen/usr/local/zopen/depot_tools/depot_tools-main
-echo "Creating a python venv..."
-python3 -m venv venv
-echo "Activating python venv named venv..."
-source ${ZOPEN_INSTALL_DIR}/venv/bin/activate
-echo "Upgrading pip in venv..."
-python -m pip install -U pip
-echo "Installing packages via requirements.txt..."
-pip install -r ${ZOPEN_INSTALL_DIR}/requirements.txt
-echo "***** append_to_setup() end"
-echo "***** append_to_setup() end"
-echo "***** append_to_setup() end"
-EOF
+echo "echo \"\tCreating a python venv...\""
+echo "python3 -m venv venv"
+echo "echo \"\tActivating python venv named venv...\""
+echo "source ${ZOPEN_INSTALL_DIR}/venv/bin/activate"
+echo "echo \"\tUpgrading pip in venv...\""
+echo "python -m pip install -U pip"
+echo "echo \"Installing packages via requirements.txt...\""
+echo "pip install -r ${ZOPEN_INSTALL_DIR}/requirements.txt"
 }
 
 zopen_get_version()
