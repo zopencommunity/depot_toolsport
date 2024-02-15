@@ -1,24 +1,24 @@
 diff --git a/setenv.sh b/setenv.sh
-new file mode 100644
+new file mode 100755
 index 00000000..72292775
 --- /dev/null
 +++ b/setenv.sh
-@@ -0,0 +1,2 @@
-#!/bin/sh
-
-# update the path to find depot_tools
-export PATH=${PATH}:${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main
-
-
-
-# activate the virtual env
-. ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main//venv/bin/activate
-
-
-# install the necessary requirements
-echo "    Installing packages via requirements.txt..."
-pip install -r ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main/requirements.txt
-
-# Using depot_tools disable metrics.
-# Comment out this line if you wish to participate.
-gclient metrics --opt-out
+@@ -0,0 +1,18 @@
++#!/bin/sh
++
++# update the path to find depot_tools
++export PATH=${PATH}:${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main
++
++
++
++# activate the virtual env
++. ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main//venv/bin/activate
++
++
++# install the necessary requirements
++echo "    Installing packages via requirements.txt..."
++pip install -r ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main/requirements.txt
++
++# Using depot_tools disable metrics.
++# Comment out this line if you wish to participate.
++gclient metrics --opt-out

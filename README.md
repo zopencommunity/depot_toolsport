@@ -6,6 +6,33 @@ Tools for working with Chromium development. It requires python 3.8 or higher.
 
 The upstream for depot tools is [here.](https://www.chromium.org/developers/how-tos/depottools/)
 
+## User Notes
+
+This workflow is for users to install and use depot_toolsport.
+
+Install the port and then logout.
+
+```
+$ zopen install depot_tools
+$ exit
+```
+Log back in and ensure that ${HOME}/zopen/etc/zopen-config is sourced
+either via .bashrc or via a manual shell command.  Here the second method
+is used.
+
+```
+$ . ~/zopen/etc/zopen-config
+```
+
+Afterwards, invoke in the same shell the setenv.sh script
+
+```
+$ . ~/zopen/usr/local/zopen/depot_tools/depot_tools-main/setenv.sh
+```
+
+This will create, activate and install the necessary packages for a python
+virtual environment.   Afterwards, the tools can be used to fetch v8.
+
 ## Developer Notes
 
 ### Building Depot Tools
