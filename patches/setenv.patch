@@ -3,7 +3,7 @@ new file mode 100755
 index 00000000..4c28cdab
 --- /dev/null
 +++ b/setenv.sh
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,74 @@
 +#!/bin/sh
 +
 +# The path and environment variables are updated as a result of the package install.
@@ -22,6 +22,7 @@ index 00000000..4c28cdab
 +
 +
 +# activate the virtual env
++echo "activating the virtual env - venv"
 +. ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main//venv/bin/activate
 +
 +# update the virtual env
