@@ -5,7 +5,7 @@
 # command in the current shell, then the path will not be there yet.  In 
 # this case check for the path in the current path.
 
-desired_path="zopen/usr/local/zopen/depot_tools/depot_tools-man"
+desired_path="zopen/usr/local/zopen/depot_tools/depot_tools-main"
 
 if  expr "${PATH}" : ".*${desired_path}.*" 1>/dev/null ; then
     echo "Good. depot_tools is in path."
