@@ -1,28 +1,36 @@
 #!/bin/sh
 
-# update the path
-export PATH=${PATH}:${HOME}/zopen/dev/depot_toolsport/depot_tools
+# The path and environment variables are updated as a result of the package install.
+# However, if the user installs the package and does not run the zopen-config
+# command in the current shell, then the path will not be there yet.  In 
+# this case check for the path in the current path.
+
+desired_path="zopen/usr/local/zopen/depot_tools/depot_tools-main"
+
+if  expr "${PATH}" : ".*${desired_path}.*" 1>/dev/null ; then
+    echo "Good. depot_tools is in path."
+else
+    echo "Path to depot_tools missing.  Adding it to path.."
+    export PATH=${PATH}:${HOME}/${desired_path}
+fi
+
 
 # activate the virtual env
-. ./myenv/bin/activate
+echo "activating the virtual env - venv"
+. ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main//venv/bin/activate
 
-# Disable updating depot_tools
-export DEPOT_TOOLS_UPDATE=0
+# update the virtual env
+python -m pip install -U pip
 
-# Disable commands:
-# * ensure_bootstrap
-# * update_depot_tools
-export DEPOT_TOOLS_BOOTSTRAP_PYTHON3=0
+
+# install the necessary requirements
+echo "Installing packages via requirements.txt..."
+pip install -r ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main/requirements.txt
 
 # Using depot_tools disable metrics.
 # Comment out this line if you wish to participate.
 gclient metrics --opt-out
 
-# ensure zoslib when built as part of the manual workflow
-# in v8port uses the correct toolchain
-export CC=clang
-export CXX=clang++
-export LINK=clang++
 
 # provide a mechanism to resume work on v8 versus 
 # ensure pristine.   Assume by default the user
@@ -64,5 +72,3 @@ if [ ${RESUME} -eq 0 ]; then
         fi
     fi
 fi
-
-

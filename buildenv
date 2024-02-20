@@ -3,12 +3,16 @@ export ZOPEN_DEV_URL="https://chromium.googlesource.com/chromium/tools/depot_too
 export ZOPEN_DEV_DEPS="python"
 export ZOPEN_RUNTIME_DEPS="python"
 export ZOPEN_BOOTSTRAP="python3"
-export ZOPEN_PYTHONDIR=`type python3 | head -1 | sed "s:^.*[ (]/:/:;s:)$::"`
-export ZOPEN_BOOTSTRAP_OPTS="bootstrap/bootstrap.py --bootstrap-name ${ZOPEN_PYTHONDIR}"
 # Nothing to configure or build:
 export ZOPEN_CONFIGURE="skip"
 export ZOPEN_MAKE="skip"
 export ZOPEN_INSTALL="zopen_install"
+
+# Set the python dir after buildenv deps are checked
+zopen_pre_patch() {
+  export ZOPEN_PYTHONDIR=`type python3 | head -1 | sed "s:^.*[ (]/:/:;s:)$::"`
+  export ZOPEN_BOOTSTRAP_OPTS="bootstrap/bootstrap.py --bootstrap-name ${ZOPEN_PYTHONDIR}"
+}
 
 zopen_install() {
   mkdir -p $ZOPEN_INSTALL_DIR
@@ -28,14 +32,62 @@ zopen_check_results()
   echo "expectedTotalTests:1"
 }
 
+# zopen_append_env() creates a file with the settings below
+# Its ${HOME}/usr/local/zopen/depot_tools/depot_tools-main/.appenv
 zopen_append_to_env()
 {
   # echo envars outside of PATH, MANPATH, LIBPATH
+
+  # update the path for depot_tools
+  # update the path for pip
+  echo "export PATH=${PATH}:${HOME}/.local/bin"
+
+  # update the compiler settings
+  # TODO: this can probably be moved to v8 build later
+  echo "export CC=clang"
+  echo "export CXX=clang++"
+  echo "export LINK=clang++"
+
+  # Disable updating depot_tools
+  echo "export DEPOT_TOOLS_UPDATE=0"
+
+  # Disable commands:
+  # * ensure_bootstrap
+  # * update_depot_tools
+  echo "export DEPOT_TOOLS_BOOTSTRAP_PYTHON3=0"
+
 }
 
+
+# Notes:
+# zopen_append_to_setup() does:
+#   creates the dir: ${HOME}/zopen/usr/local/zopen/depot_tools
+#   during the `zopen build` process.
+#
+#   during this stage the current working directory is
+#   ${HOME}/zopen/usr/local/zopen/depot_tools
+#
+#   it creates/appends to the file setup.sh in that dir.
+#
+# Example buildenvs which use this portion of 
+# code are:
+#
+#   https://github.com/ZOSOpenTools/sudoport/blob/main/buildenv#L49
+#
+#   https://github.com/ZOSOpenTools/gpgport/blob/main/buildenv#L50
+#
+# Build workflow
+#   cd ~/zopen/dev/depot_toolsport
+#   rm ~/.local ~/zopen/usr/local/zopen/depot_tools; rm install depot_tools; zopen build
+#
 zopen_append_to_setup()
 {
-  # echo commands that will run when installing via setup.sh
+    # echo commands that will run when installing via setup.sh
+    # At this time, ZOPEN_INSTAL_DIR is:
+    # ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main
+
+    echo "echo \"    Creating a python venv...\""
+    echo "python3 -m venv venv"
 }
 
 zopen_get_version()
