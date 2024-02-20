@@ -3,12 +3,16 @@ export ZOPEN_DEV_URL="https://chromium.googlesource.com/chromium/tools/depot_too
 export ZOPEN_DEV_DEPS="python"
 export ZOPEN_RUNTIME_DEPS="python"
 export ZOPEN_BOOTSTRAP="python3"
-export ZOPEN_PYTHONDIR=`type python3 | head -1 | sed "s:^.*[ (]/:/:;s:)$::"`
-export ZOPEN_BOOTSTRAP_OPTS="bootstrap/bootstrap.py --bootstrap-name ${ZOPEN_PYTHONDIR}"
 # Nothing to configure or build:
 export ZOPEN_CONFIGURE="skip"
 export ZOPEN_MAKE="skip"
 export ZOPEN_INSTALL="zopen_install"
+
+# Set the python dir after buildenv deps are checked
+zopen_pre_patch() {
+  export ZOPEN_PYTHONDIR=`type python3 | head -1 | sed "s:^.*[ (]/:/:;s:)$::"`
+  export ZOPEN_BOOTSTRAP_OPTS="bootstrap/bootstrap.py --bootstrap-name ${ZOPEN_PYTHONDIR}"
+}
 
 zopen_install() {
   mkdir -p $ZOPEN_INSTALL_DIR
@@ -35,7 +39,6 @@ zopen_append_to_env()
   # echo envars outside of PATH, MANPATH, LIBPATH
 
   # update the path for depot_tools
-  #export PATH=${PATH}:${HOME}/zopen/dev/depot_toolsport/depot_tools
   # update the path for pip
   echo "export PATH=${PATH}:${HOME}/.local/bin"
 
