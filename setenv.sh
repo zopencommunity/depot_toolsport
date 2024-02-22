@@ -60,15 +60,15 @@ done
 # so as to pull a fresh copy.  If this is the first time building
 # depot tools, these file will not be present and thus
 # no need to attempt to remove them. 
-# NOTE: assuming v8 will be built in $HOME/zopen/dev/v8base
+# NOTE: assuming v8 will be built in $HOME/zopen/dev/v8port/v8base
 if [ ${RESUME} -eq 0 ]; then
     echo "Attempting to delete any leftover .gclient* entries"
-    if [ -d "${HOME}/zopen/dev/v8base" ]; then
-        if [ -f "${HOME}/zopen/dev/v8base/.gclient_entries" ]; then
-            rm ${HOME}/zopen/dev/v8base/.gclient_entries
+    if [ -d "${HOME}/zopen/dev/v8port/v8base" ]; then
+        if [ -f "${HOME}/zopen/dev/v8port/v8base/.gclient_entries" ]; then
+            rm ${HOME}/zopen/dev/v8port/v8base/.gclient_entries
         fi
-        if [ -f "${HOME}/zopen/dev/v8base/.gclient_entries" ]; then
-            rm ${HOME}/zopen/dev/v8base/.gclient
+        if [ -f "${HOME}/zopen/dev/v8port/v8base/.gclient_entries" ]; then
+            rm ${HOME}/zopen/dev/v8port/v8base/.gclient
         fi
     fi
 fi
