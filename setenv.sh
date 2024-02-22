@@ -67,7 +67,7 @@ if [ ${RESUME} -eq 0 ]; then
         if [ -f "${HOME}/zopen/dev/v8port/v8base/.gclient_entries" ]; then
             rm ${HOME}/zopen/dev/v8port/v8base/.gclient_entries
         fi
-        if [ -f "${HOME}/zopen/dev/v8port/v8base/.gclient_entries" ]; then
+        if [ -f "${HOME}/zopen/dev/v8port/v8base/.gclient" ]; then
             rm ${HOME}/zopen/dev/v8port/v8base/.gclient
         fi
     fi
