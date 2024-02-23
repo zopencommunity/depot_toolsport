@@ -64,7 +64,7 @@ zopen_append_to_env()
   echo "export VPYTHON_BYPASS='manually managed python not supported by chrome operations'"
 
   # Run the CIPD client that was built on z/OS; see depot_tools/cipd.
-  echo "export CUSTOM_CIPD_CLIENT=$HOME/depot_tools/.cipd_client"
+  echo "export CUSTOM_CIPD_CLIENT=$ZOPEN_INSTALL_DIR/.cipd_client"
 }
 
 
