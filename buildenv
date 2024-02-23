@@ -39,8 +39,6 @@ zopen_append_to_env()
   # echo envars outside of PATH, MANPATH, LIBPATH
 
   # update the path for depot_tools
-  # update the path for pip
-  echo "export PATH=${PATH}:${HOME}/.local/bin"
 
   # update the compiler settings
   # TODO: this can probably be moved to v8 build later
@@ -85,9 +83,6 @@ zopen_append_to_setup()
     # echo commands that will run when installing via setup.sh
     # At this time, ZOPEN_INSTAL_DIR is:
     # ${HOME}/zopen/usr/local/zopen/depot_tools/depot_tools-main
-
-    echo "echo \"    Creating a python venv...\""
-    echo "python3 -m venv venv"
 }
 
 zopen_get_version()
