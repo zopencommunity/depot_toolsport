@@ -31,14 +31,7 @@ will not exist and this step is skipped.
 
 ```
 $ cd ${HOME}/zopen/dev/depot_toolsport
-$ rm -rf depot_tools
-```
-
-Actual building of the port:
-
-```
-$ cd ${HOME}/zopen/dev/depot_toolsport
-$ zopen build
+$ rm -rf ~/.local ~/zopen/usr/local/zopen/depot_tools; rm -rf install depot_tools; zopen build
 ```
 
 
