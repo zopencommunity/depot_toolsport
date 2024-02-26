@@ -17,6 +17,10 @@ zopen_pre_patch() {
 zopen_install() {
   mkdir -p $ZOPEN_INSTALL_DIR
   cp -r * $ZOPEN_INSTALL_DIR/ # modify to copy the relevant scripts
+  curdir=`pwd`
+  cd $ZOPEN_INSTALL_DIR
+  pax -p p -rzvf $curdir/../patches/cipd_binaries.pax.Z
+  cd $curdir
 }
 
 zopen_check_results()
@@ -54,6 +58,11 @@ zopen_append_to_env()
   # * update_depot_tools
   echo "export DEPOT_TOOLS_BOOTSTRAP_PYTHON3=0"
 
+  # Disable vpython3 (use python directly); see depot_tools/vpython3.
+  echo "export VPYTHON_BYPASS='manually managed python not supported by chrome operations'"
+
+  # Run the CIPD client that was built on z/OS; see depot_tools/cipd.
+  echo "export CUSTOM_CIPD_CLIENT=$ZOPEN_INSTALL_DIR/.cipd_client"
 }
 
 
@@ -76,7 +85,7 @@ zopen_append_to_env()
 #
 # Build workflow
 #   cd ~/zopen/dev/depot_toolsport
-#   rm ~/.local ~/zopen/usr/local/zopen/depot_tools; rm install depot_tools; zopen build
+#   rm -rf ~/.local ~/zopen/usr/local/zopen/depot_tools; rm -rf install depot_tools; zopen build
 #
 zopen_append_to_setup()
 {
