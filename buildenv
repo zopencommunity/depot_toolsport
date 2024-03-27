@@ -42,14 +42,6 @@ zopen_append_to_env()
 {
   # echo envars outside of PATH, MANPATH, LIBPATH
 
-  # update the path for depot_tools
-
-  # update the compiler settings
-  # TODO: this can probably be moved to v8 build later
-  echo "export CC=clang"
-  echo "export CXX=clang++"
-  echo "export LINK=clang++"
-
   # Disable updating depot_tools
   echo "export DEPOT_TOOLS_UPDATE=0"
 
