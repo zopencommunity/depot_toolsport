@@ -45,3 +45,16 @@ index 031bba4b..9dc04d26 100644
                             googlesource_url)
          if not tokens or len(tokens.groups()) != 2:
              # googlesource_url is not in the expected format.
+diff --git a/upload_to_google_storage_first_class.py b/upload_to_google_storage_first_class.py
+index 68ae3f83..b3623e00 100755
+--- a/upload_to_google_storage_first_class.py
++++ b/upload_to_google_storage_first_class.py
+@@ -134,7 +134,7 @@ def upload_to_google_storage(file: str, base_url: str, object_name: str,
+         raise Exception(
+             code, 'Encountered error on uploading %s to %s\n%s' %
+             (file, file_url, err))
+-    pattern = re.escape(file_url) + '#(?P<generation>\d+)'
++    pattern = re.escape(file_url) + r'#(?P<generation>\d+)'
+     # The geneartion number is printed as part of the progress / status info
+     # which gsutil outputs to stderr to keep separated from any final output
+     # data.
