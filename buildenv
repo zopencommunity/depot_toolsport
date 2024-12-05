@@ -1,7 +1,7 @@
 export ZOPEN_BUILD_LINE="DEV"
 export ZOPEN_DEV_URL="https://chromium.googlesource.com/chromium/tools/depot_tools.git"
-export ZOPEN_DEV_DEPS="python"
-export ZOPEN_RUNTIME_DEPS="python"
+export ZOPEN_DEV_DEPS="check_python"
+export ZOPEN_RUNTIME_DEPS="check_python"
 export ZOPEN_CATEGORIES="development"
 export ZOPEN_BOOTSTRAP="python3"
 # Nothing to configure or build:
