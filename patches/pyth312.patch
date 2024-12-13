@@ -1,16 +1,17 @@
 diff --git a/fetch.py b/fetch.py
-index 99ba59d1..7bd36d20 100755
+index 99ba59d1..758cf55a 100755
 --- a/fetch.py
 +++ b/fetch.py
-@@ -28,6 +28,7 @@ import gclient_utils
+@@ -27,7 +27,7 @@ import sys
+ import gclient_utils
  import git_common
  
- from distutils import spawn
+-from distutils import spawn
 +from shutil import which
  
  SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
  
-@@ -79,7 +80,7 @@ class Checkout(object):
+@@ -79,7 +79,7 @@ class Checkout(object):
  
  class GclientCheckout(Checkout):
      def run_gclient(self, *cmd, **kwargs):
@@ -20,23 +21,23 @@ index 99ba59d1..7bd36d20 100755
                                                         'gclient.py'))
          else:
 diff --git a/gclient.py b/gclient.py
-index 4042ac83..8940816e 100755
+index 72ecf74a..8620f62c 100755
 --- a/gclient.py
 +++ b/gclient.py
-@@ -3328,7 +3328,7 @@ def CMDgitmodules(parser, args):
-     # This check makes the transition easier.
-     strip_git_suffix = True
+@@ -3354,7 +3354,7 @@ def CMDgitmodules(parser, args):
+     # first time.
+     set_recursedeps = True
      if os.path.exists(options.output_gitmodules):
 -        dot_git_pattern = re.compile('^(\s*)url(\s*)=.*\.git$')
 +        dot_git_pattern = re.compile(r'^(\s*)url(\s*)=.*\.git$')
          with open(options.output_gitmodules) as f:
              strip_git_suffix = not any(dot_git_pattern.match(l) for l in f)
- 
+             set_recursedeps = any(
 diff --git a/gclient_scm.py b/gclient_scm.py
-index 031bba4b..9dc04d26 100644
+index 004a808c..32a1400b 100644
 --- a/gclient_scm.py
 +++ b/gclient_scm.py
-@@ -431,7 +431,7 @@ class GitWrapper(SCMWrapper):
+@@ -433,7 +433,7 @@ class GitWrapper(SCMWrapper):
          patch_rev_tokens = patch_rev.split('/')
          change = patch_rev_tokens[-2]
          # Parse the googlesource_url.
