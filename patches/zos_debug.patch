@@ -1,0 +1,197 @@
+diff --git a/fetch.py b/fetch.py
+index 99ba59d1..758cf55a 100755
+--- a/fetch.py
++++ b/fetch.py
+@@ -27,7 +27,7 @@ import sys
+ import gclient_utils
+ import git_common
+ 
+-from distutils import spawn
++from shutil import which
+ 
+ SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+ 
+@@ -79,7 +79,7 @@ class Checkout(object):
+ 
+ class GclientCheckout(Checkout):
+     def run_gclient(self, *cmd, **kwargs):
+-        if not spawn.find_executable('gclient'):
++        if not which('gclient'):
+             cmd_prefix = (sys.executable, os.path.join(SCRIPT_PATH,
+                                                        'gclient.py'))
+         else:
+diff --git a/gclient b/gclient
+index cd77c77d..31f36584 100755
+--- a/gclient
++++ b/gclient
+@@ -26,4 +26,5 @@ fi
+ # standalone, but allow other PATH manipulations to take priority.
+ PATH=$PATH:$base_dir
+ 
++echo "***JFD gclient exec vpython3 ${base_dir}/gclient.py ***"
+ PYTHONDONTWRITEBYTECODE=1 exec vpython3 "$base_dir/gclient.py" "$@"
+diff --git a/gclient.py b/gclient.py
+index 72ecf74a..326e452c 100755
+--- a/gclient.py
++++ b/gclient.py
+@@ -114,6 +114,7 @@ import scm as scm_git
+ import setup_color
+ import subcommand
+ import subprocess2
++import subprocess
+ import upload_to_google_storage_first_class
+ from third_party.repo.progress import Progress
+ 
+@@ -135,6 +136,23 @@ NO_SYNC_EXPERIMENT = 'no-sync'
+ 
+ PRECOMMIT_HOOK_VAR = 'GCLIENT_PRECOMMIT'
+ 
++print('JFD gclient.py intro code ==========================================')
++print('JFD gclient.py DEPOT_TOOLS_DIR: %s **********************' % DEPOT_TOOLS_DIR)
++print('JFD gclient.py PREVIOUS_CUSTOM_VARS_FILE: %s **********************' % PREVIOUS_CUSTOM_VARS_FILE)
++print('JFD gclient.py PREVIOUS_SYNC_COMMITS_FILE: %s **********************' % PREVIOUS_SYNC_COMMITS_FILE)
++print('JFD gclient.py PATH: %s' % os.environ['PATH'])
++print('JFD gclient.py AWS_CREDENTIAL_FILE: **%s**' % os.environ.get('AWS_CREDENTIAL_FILEPATH', 'VAL FOR PRINT'))
++AWSCOMMAND='export | grep AWS'
++result = subprocess.run(['bash', '-c', AWSCOMMAND], capture_output=True, text=True)
++print(f'JFD gclient.py AWS grep exports:{ result.stdout }')
++print('JFD gclient.py type gclient: %s' % subprocess.run(['type', 'gclient'],
++                                                         capture_output=True,
++                                                         text=True).stdout)
++print('JFD gclient.py which gclient: %s' % subprocess.run(['which', 'gclient'],
++                                                          capture_output=True,
++                                                          text=True).stdout)
++print('JFD gclient.py intro code ==== END DUMP ============================')
++
+ 
+ class GNException(Exception):
+     pass
+@@ -241,11 +259,18 @@ class Hook(object):
+ 
+     def run(self):
+         """Executes the hook's command (provided the condition is met)."""
+-        if (self._condition and not gclient_eval.EvaluateCondition(
+-                self._condition, self._variables)):
++        print('JFD gclient.py Hook::run() entry ===============================================')
++        if (self._condition and not gclient_eval.EvaluateCondition( self._condition, self._variables)):
+             return
+ 
+         cmd = list(self._action)
++        print('JFD gclient.py Hook::run() cmd %s\n' % cmd)
++        print('JFD gclient.py Hook::run() self._cwd_base %s\n' % self._cwd_base)
++        print('JFD gclient.py Hook::run() self.effective_cwd %s\n' % self.effective_cwd)
++        print('JFD gclient.py Hook::run() export %s\n' % self.effective_cwd)
++        MYCOMMAND='export | grep -e PATH -e AWS'
++        result = subprocess.run(['bash', '-c', MYCOMMAND], capture_output=True, text=True)
++        print(f'JFD gclient.py export | grep -e PATH -e AWS :{ result.stdout }')
+ 
+         if cmd[0] == 'vpython3' and _detect_host_os() == 'win':
+             cmd[0] += '.bat'
+@@ -274,8 +299,7 @@ class Hook(object):
+                     'name':
+                     self._name,
+                     'cwd':
+-                    os.path.relpath(os.path.normpath(self.effective_cwd),
+-                                    self._cwd_base),
++                    os.path.relpath(os.path.normpath(self.effective_cwd), self._cwd_base),
+                     'condition':
+                     self._condition,
+                     'execution_time':
+@@ -286,6 +310,7 @@ class Hook(object):
+             if elapsed_time > 10:
+                 print("Hook '%s' took %.2f secs" %
+                       (gclient_utils.CommandToStr(cmd), elapsed_time))
++        print('JFD gclient.py Hook::run() exit ===============================================')
+ 
+ 
+ class DependencySettings(object):
+@@ -386,6 +411,9 @@ class DependencySettings(object):
+ 
+     @property
+     def target_os(self):
++        print('JFD gclient.py DependencySetting::target_os() entry/exit ===============================================')
++        print(f'JFD gclient.py DependencySetting::target_os() self.parent.target_os: {self.parent.target_os}')
++        print(f'JFD gclient.py DependencySetting::target_os() self.local_target_os: {self.local_target_os}')
+         if self.local_target_os is not None:
+             return tuple(set(self.local_target_os).union(self.parent.target_os))
+ 
+@@ -1207,6 +1235,8 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
+     ):
+         # type: () -> None
+         """Runs |command| then parse the DEPS file."""
++        print('JFD gclient.py Dependency::run() entry/exit ===============================================')
++        print(f'JFD gclient.py Dependency::run() command: {command}')
+         logging.info('Dependency(%s).run()' % self.name)
+         assert self._file_list == []
+         # When running runhooks, there's no need to consult the SCM.
+@@ -1737,6 +1767,9 @@ class GitDependency(Dependency):
+     #override
+     def CreateSCM(self, out_cb=None):
+         """Create a Wrapper instance suitable for handling this git dependency."""
++        print('JFD gclient.py GitDependency::CreateSCM() self.name **%s**' % self.name)
++        print('JFD gclient.py GitDependency::CreateSCM() self.root.root_dir **%s**' % self.root.root_dir)
++        print('JFD gclient.py GitDependency::CreateSCM() self.url **%s**' % self.url)
+         if self._IsCog():
+             return gclient_scm.CogWrapper()
+ 
+@@ -2943,6 +2976,12 @@ class CipdDependency(Dependency):
+     def run(self, revision_overrides, command, args, work_queue, options,
+             patch_refs, target_branches, skip_sync_revisions):
+         """Runs |command| then parse the DEPS file."""
++        print("JFD gclient.py GipdDependecy::run() entry =================")
++        print("JFD gclient.py GipdDependecy::run() self.name: **%s**" % self.name)
++        print("JFD gclient.py GipdDependecy::run() command: **%s**" % command)
++        print("JFD gclient.py GipdDependecy::run() options: **%s**" % options)
++        print("JFD gclient.py GipdDependecy::run() args: **%s**" % args)
++
+         logging.info('CipdDependency(%s).run()' % self.name)
+         # GCS dependencies do not need to run during runhooks.
+         # TODO(b/349643421): Note, for a GCSDependency we also return early
+@@ -3354,7 +3393,7 @@ def CMDgitmodules(parser, args):
+     # first time.
+     set_recursedeps = True
+     if os.path.exists(options.output_gitmodules):
+-        dot_git_pattern = re.compile('^(\s*)url(\s*)=.*\.git$')
++        dot_git_pattern = re.compile(r'^(\s*)url(\s*)=.*\.git$')
+         with open(options.output_gitmodules) as f:
+             strip_git_suffix = not any(dot_git_pattern.match(l) for l in f)
+             set_recursedeps = any(
+diff --git a/gclient_scm.py b/gclient_scm.py
+index 004a808c..32a1400b 100644
+--- a/gclient_scm.py
++++ b/gclient_scm.py
+@@ -433,7 +433,7 @@ class GitWrapper(SCMWrapper):
+         patch_rev_tokens = patch_rev.split('/')
+         change = patch_rev_tokens[-2]
+         # Parse the googlesource_url.
+-        tokens = re.search('//(.+).googlesource.com/(.+?)(?:\.git)?$',
++        tokens = re.search(r'//(.+).googlesource.com/(.+?)(?:\.git)?$',
+                            googlesource_url)
+         if not tokens or len(tokens.groups()) != 2:
+             # googlesource_url is not in the expected format.
+diff --git a/upload_to_google_storage_first_class.py b/upload_to_google_storage_first_class.py
+index 68ae3f83..b3623e00 100755
+--- a/upload_to_google_storage_first_class.py
++++ b/upload_to_google_storage_first_class.py
+@@ -134,7 +134,7 @@ def upload_to_google_storage(file: str, base_url: str, object_name: str,
+         raise Exception(
+             code, 'Encountered error on uploading %s to %s\n%s' %
+             (file, file_url, err))
+-    pattern = re.escape(file_url) + '#(?P<generation>\d+)'
++    pattern = re.escape(file_url) + r'#(?P<generation>\d+)'
+     # The geneartion number is printed as part of the progress / status info
+     # which gsutil outputs to stderr to keep separated from any final output
+     # data.
+diff --git a/vpython3 b/vpython3
+index e6a5bc76..fa1cfe89 100755
+--- a/vpython3
++++ b/vpython3
+@@ -30,7 +30,7 @@ then
+         ;;
+     esac
+   done
+-  exec "python3" "${NEWARGS[@]}"
++  exec "python3" "-u" "${NEWARGS[@]}"
+ fi
+ 
+ # Export for other depot_tools scripts to re-use.
