@@ -1,0 +1,91 @@
+diff --git a/fetch.py b/fetch.py
+index 99ba59d1..758cf55a 100755
+--- a/fetch.py
++++ b/fetch.py
+@@ -27,7 +27,7 @@ import sys
+ import gclient_utils
+ import git_common
+ 
+-from distutils import spawn
++from shutil import which
+ 
+ SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+ 
+@@ -79,7 +79,7 @@ class Checkout(object):
+ 
+ class GclientCheckout(Checkout):
+     def run_gclient(self, *cmd, **kwargs):
+-        if not spawn.find_executable('gclient'):
++        if not which('gclient'):
+             cmd_prefix = (sys.executable, os.path.join(SCRIPT_PATH,
+                                                        'gclient.py'))
+         else:
+diff --git a/gclient.py b/gclient.py
+index fb5a9c6c..aebb4608 100755
+--- a/gclient.py
++++ b/gclient.py
+@@ -136,6 +136,7 @@ NO_SYNC_EXPERIMENT = 'no-sync'
+ PRECOMMIT_HOOK_VAR = 'GCLIENT_PRECOMMIT'
+ 
+ 
++
+ class GNException(Exception):
+     pass
+ 
+@@ -2943,6 +2944,7 @@ class CipdDependency(Dependency):
+     def run(self, revision_overrides, command, args, work_queue, options,
+             patch_refs, target_branches, skip_sync_revisions):
+         """Runs |command| then parse the DEPS file."""
++
+         logging.info('CipdDependency(%s).run()' % self.name)
+         # GCS dependencies do not need to run during runhooks.
+         # TODO(b/349643421): Note, for a GCSDependency we also return early
+@@ -3354,7 +3356,7 @@ def CMDgitmodules(parser, args):
+     # first time.
+     set_recursedeps = True
+     if os.path.exists(options.output_gitmodules):
+-        dot_git_pattern = re.compile('^(\s*)url(\s*)=.*\.git$')
++        dot_git_pattern = re.compile(r'^(\s*)url(\s*)=.*\.git$')
+         with open(options.output_gitmodules) as f:
+             strip_git_suffix = not any(dot_git_pattern.match(l) for l in f)
+             set_recursedeps = any(
+diff --git a/gclient_scm.py b/gclient_scm.py
+index 004a808c..32a1400b 100644
+--- a/gclient_scm.py
++++ b/gclient_scm.py
+@@ -433,7 +433,7 @@ class GitWrapper(SCMWrapper):
+         patch_rev_tokens = patch_rev.split('/')
+         change = patch_rev_tokens[-2]
+         # Parse the googlesource_url.
+-        tokens = re.search('//(.+).googlesource.com/(.+?)(?:\.git)?$',
++        tokens = re.search(r'//(.+).googlesource.com/(.+?)(?:\.git)?$',
+                            googlesource_url)
+         if not tokens or len(tokens.groups()) != 2:
+             # googlesource_url is not in the expected format.
+diff --git a/upload_to_google_storage_first_class.py b/upload_to_google_storage_first_class.py
+index 68ae3f83..b3623e00 100755
+--- a/upload_to_google_storage_first_class.py
++++ b/upload_to_google_storage_first_class.py
+@@ -134,7 +134,7 @@ def upload_to_google_storage(file: str, base_url: str, object_name: str,
+         raise Exception(
+             code, 'Encountered error on uploading %s to %s\n%s' %
+             (file, file_url, err))
+-    pattern = re.escape(file_url) + '#(?P<generation>\d+)'
++    pattern = re.escape(file_url) + r'#(?P<generation>\d+)'
+     # The geneartion number is printed as part of the progress / status info
+     # which gsutil outputs to stderr to keep separated from any final output
+     # data.
+diff --git a/vpython3 b/vpython3
+index e6a5bc76..57ba866d 100755
+--- a/vpython3
++++ b/vpython3
+@@ -30,7 +30,8 @@ then
+         ;;
+     esac
+   done
+-  exec "python3" "${NEWARGS[@]}"
++  # modify python so we unbuffer output for ease of debugging
++  exec "python3" "-u" "${NEWARGS[@]}"
+ fi
+ 
+ # Export for other depot_tools scripts to re-use.
