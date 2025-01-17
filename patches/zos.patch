@@ -21,10 +21,26 @@ index 99ba59d1..758cf55a 100755
                                                         'gclient.py'))
          else:
 diff --git a/gclient.py b/gclient.py
-index 72ecf74a..8620f62c 100755
+index fb5a9c6c..aebb4608 100755
 --- a/gclient.py
 +++ b/gclient.py
-@@ -3354,7 +3354,7 @@ def CMDgitmodules(parser, args):
+@@ -136,6 +136,7 @@ NO_SYNC_EXPERIMENT = 'no-sync'
+ PRECOMMIT_HOOK_VAR = 'GCLIENT_PRECOMMIT'
+ 
+ 
++
+ class GNException(Exception):
+     pass
+ 
+@@ -2943,6 +2944,7 @@ class CipdDependency(Dependency):
+     def run(self, revision_overrides, command, args, work_queue, options,
+             patch_refs, target_branches, skip_sync_revisions):
+         """Runs |command| then parse the DEPS file."""
++
+         logging.info('CipdDependency(%s).run()' % self.name)
+         # GCS dependencies do not need to run during runhooks.
+         # TODO(b/349643421): Note, for a GCSDependency we also return early
+@@ -3354,7 +3356,7 @@ def CMDgitmodules(parser, args):
      # first time.
      set_recursedeps = True
      if os.path.exists(options.output_gitmodules):
@@ -59,3 +75,17 @@ index 68ae3f83..b3623e00 100755
      # The geneartion number is printed as part of the progress / status info
      # which gsutil outputs to stderr to keep separated from any final output
      # data.
+diff --git a/vpython3 b/vpython3
+index e6a5bc76..57ba866d 100755
+--- a/vpython3
++++ b/vpython3
+@@ -30,7 +30,8 @@ then
+         ;;
+     esac
+   done
+-  exec "python3" "${NEWARGS[@]}"
++  # modify python so we unbuffer output for ease of debugging
++  exec "python3" "-u" "${NEWARGS[@]}"
+ fi
+ 
+ # Export for other depot_tools scripts to re-use.
