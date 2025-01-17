@@ -4,7 +4,8 @@ export ZOPEN_DEV_DEPS="check_python"
 export ZOPEN_RUNTIME_DEPS="check_python"
 export ZOPEN_CATEGORIES="development"
 export ZOPEN_BOOTSTRAP="python3"
-# Nothing to configure or build:
+# Nothing to configure, check or make:
+export ZOPEN_CHECK="skip"
 export ZOPEN_CONFIGURE="skip"
 export ZOPEN_MAKE="skip"
 export ZOPEN_INSTALL="zopen_install"
